@@ -14,7 +14,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
-uint32_t value = 0;
+uint16_t value = 0;
 int readValue = 0;
 int pinIn = 15;
 
@@ -55,7 +55,7 @@ void loopHall() {
   value = readValue;
   //Serial.print("sensor = ");
   Serial.println(readValue);//to graph 
-  delay(100);
+  delay(90);
 }
 
 void setupBLE() {
@@ -97,10 +97,9 @@ void setupBLE() {
 void loopBLE() {
     // notify changed value
     if (deviceConnected) {
-        pCharacteristic->setValue((uint8_t*)&value, 4);
+        pCharacteristic->setValue(value);
         pCharacteristic->notify();
-        //value++;
-        delay(3); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
+        delay(10); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
     }
     // disconnecting
     if (!deviceConnected && oldDeviceConnected) {
